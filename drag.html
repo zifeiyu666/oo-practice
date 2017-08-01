@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src='http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js'></script>
+	<style>
+		#drag_box{
+			width: 100px;
+			height: 100px;
+			background: #eee;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id = 'drag_box'>
+		123456
+	</div>
+	<script>
+		// $('#drag_box').mousedown(dowm)
+		// $('#drag_box').mouseup(up)
+		// var offsetX = 0, offsetY = 0, left = 0, dtop = 0;
+		// function dowm(ev) {
+		// 	let event = ev || event;
+			
+		// 	offsetX = event.offsetX;
+		// 	offsetY = event.offsetY;
+		// 	left = $('#drag_box').offset().left;
+		// 	dtop = $('#drag_box').offset().top;
+		// 	$('#drag_box').mousemove(move)
+			
+		// }
+		// function move(ev) {
+		// 	let event = ev || event;
+		// 	let disX = event.offsetX - offsetX;
+		// 	let disY = event.offsetY - offsetY;
+
+		// 	left += disX ;
+		// 	dtop += disY;
+		// 	event.preventDefault();
+		// 	$('#drag_box').css({left: left, top: dtop})
+		// }
+		// function up(ev) {
+		// 	let event = ev || event;
+		// 	console.log(123);
+		// 	$('#drag_box').unbind('mousemove');
+		// }
+
+		function MyDrag(id) {
+			this.target = $("#" + id);
+		}
+		MyDrag.prototype = {
+			offsetX: 0,
+			offsetY: 0, 
+			left: 0,
+			dtop: 0,
+			init() {
+				let _this = this;
+				this.target.mousedown(function(ev) {_this.down(ev)})
+				this.target.mouseup(function (ev) {_this.up(ev)})
+			},
+			down(ev) {
+				let _this = this;
+				let event = ev || event;
+				left = this.target.offset().left;
+				dtop = this.target.offset().top;
+				iX = event.clientX - left;
+				iY = event.clientY - dtop;
+				$(document).mousemove(function(ev) {_this.move(ev)});
+				return false;
+			},
+			move(ev) {
+				let event = ev || event;
+				let disX = event.clientX - iX;
+				let disY = event.clientY - iY;
+				event.preventDefault();
+				this.target.css({left: disX, top: disY})
+			},
+			up(ev) {
+				let event = ev || event;
+				console.log(123);
+				$(document).unbind('mousemove');
+			}
+
+
+		}
+		var drag1 = new MyDrag('drag_box');
+		drag1.init();
+
+	</script>
+</body>
+</html>
